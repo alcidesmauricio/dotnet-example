@@ -8,7 +8,6 @@ public class CreateHelloWorldHandler : IRequestHandler<CreateHelloWorldCommand, 
     private readonly IMapper _mapper;
     private readonly IHelloWorldService _helloWorldService;
 
-
     public CreateHelloWorldHandler(ILogger<CreateHelloWorldHandler> logger,
                                     IMapper mapper,
                                     IHelloWorldService helloWorldService)

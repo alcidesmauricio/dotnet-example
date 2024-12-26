@@ -16,12 +16,8 @@ public class MappingProfile : Profile
 
         foreach (var type in types)
         {
-            var instance = Activator.CreateInstance(type);
-
-            var methodInfo = type.GetMethod("Mapping")
-                ?? type.GetInterface("IMapFrom`1")!.GetMethod("Mapping");
-
-            methodInfo?.Invoke(instance, new object[] { this });
+            var methodInfo = type.GetMethod("Mapping", BindingFlags.Static | BindingFlags.Public);
+            methodInfo?.Invoke(null, new object[] { this });
         }
     }
 }

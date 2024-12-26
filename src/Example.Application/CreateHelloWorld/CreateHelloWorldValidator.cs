@@ -5,7 +5,7 @@ public class CreateHelloWorldValidator : AbstractValidator<CreateHelloWorldComma
     public CreateHelloWorldValidator()
     {
         RuleFor(command => command.UserName)
-        .NotNull()
-        .NotEmpty();
+            .NotNull()
+            .NotEmpty();
     }
 }
