@@ -8,7 +8,7 @@ namespace Example.Infrastructure.Services
         public async Task<HelloWorldResponse> Create(string userName, int userLevel)
         {
             await Task.Delay(2000);
-            return new HelloWorldResponse
+            return new()
             {
                 UserId = Guid.NewGuid(),
                 Level = userLevel,
