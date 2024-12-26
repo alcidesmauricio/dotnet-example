@@ -8,7 +8,7 @@ public class CreateHelloWorldResult : IMapFrom<HelloWorldResponse>
     public string UserName { get; set; } = default!;
     public UserLevel Level { get; set; }
 
-    public void Mapping(Profile profile)
+    public static void Mapping(Profile profile)
     {
         profile.CreateMap<HelloWorldResponse, CreateHelloWorldResult>()
             .ForMember(d => d.Level, opt => opt.MapFrom(s => (UserLevel)s.Level))
