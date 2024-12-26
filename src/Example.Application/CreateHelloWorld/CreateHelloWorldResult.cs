@@ -4,9 +4,9 @@ namespace Example.Application.CreateHelloWorld;
 
 public class CreateHelloWorldResult : IMapFrom<HelloWorldResponse>
 {
-    public Guid Id { get; set; }
-    public string UserName { get; set; } = default!;
-    public UserLevel Level { get; set; }
+    public required Guid Id { get; init; }
+    public required string UserName { get; init; } = default!;
+    public required UserLevel Level { get; init; }
 
     public void Mapping(Profile profile)
     {

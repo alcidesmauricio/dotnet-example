@@ -8,7 +8,6 @@ public class CreateHelloWorldHandlerTests
     private readonly Mock<IMapper> _mapper;
     private readonly Mock<IHelloWorldService> _helloWorldService;
 
-
     public CreateHelloWorldHandlerTests()
     {
         _logger = new Mock<ILogger<CreateHelloWorldHandler>>();
@@ -57,7 +56,6 @@ public class CreateHelloWorldHandlerTests
         _helloWorldService.VerifyAll();
     }
 
-
     [Fact]
     public async Task Should_Create_Hello_World_Throw_Exception()
     {
@@ -81,7 +79,6 @@ public class CreateHelloWorldHandlerTests
 
         _helloWorldService.Setup(x => x.Create(command.UserName, (int)command.Level))
                             .ThrowsAsync(new Exception());
-
 
         //act
         //assert
