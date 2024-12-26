@@ -8,10 +8,7 @@ public class HelloWorldController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public HelloWorldController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public HelloWorldController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
     [ProducesResponseType(typeof(CreateHelloWorldResult), (int)HttpStatusCode.OK)]
@@ -19,6 +16,6 @@ public class HelloWorldController : ControllerBase
     public async Task<IActionResult> Post([FromBody] CreateHelloWorldCommand command)
     {
         var result = await _mediator.Send(command);
-        return Ok(result);
+        return Results.Ok(result);
     }
 }

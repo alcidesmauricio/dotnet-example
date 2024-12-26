@@ -22,9 +22,8 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
                     v.ValidateAsync(context, cancellationToken)));
 
             var failure = validationResults
-                .Where(r => r.Errors.Any())
                 .SelectMany(r => r.Errors)
-                .FirstOrDefault();
+                .FirstOrDefault(r => r is not null);
 
             if (failure is not null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest, failure.ErrorMessage, false);
