@@ -1,0 +1,39 @@
+{
+    "input_data": {
+        "json": {
+            "data": {
+                "desired_dotnet_version": "net8",
+                "files": [
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Application/Common/Mappings/IMapFrom.cs",
+                        "code": "namespace Example.Application.Common.Mappings;\n\npublic interface IMapFrom<T>\n{\n    void Mapping(Profile profile) => profile.CreateMap(typeof(T), GetType());\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Application/Common/Mappings/MappingProfile.cs",
+                        "code": "namespace Example.Application.Common.Mappings;\n\npublic class MappingProfile : Profile\n{\n    public MappingProfile()\n    {\n        ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());\n    }\n\n    private void ApplyMappingsFromAssembly(Assembly assembly)\n    {\n        var types = assembly.GetExportedTypes()\n            .Where(t => t.GetInterfaces().Any(i =>\n                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom<>)))\n            .ToList();\n\n        foreach (var type in types)\n        {\n            var instance = Activator.CreateInstance(type);\n\n            var methodInfo = type.GetMethod(\"Mapping\")\n                ?? type.GetInterface(\"IMapFrom`1\")!.GetMethod(\"Mapping\");\n\n            methodInfo?.Invoke(instance, new object[] { this });\n        }\n    }\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Api/Dockerfile",
+                        "code": "FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base\nWORKDIR /app\nEXPOSE 5000\nEXPOSE 5001\n\nFROM mcr.microsoft.com/dotnet/sdk:6.0 AS build\nWORKDIR /\nCOPY ./ /\n\nRUN dotnet restore \"./src/Example.Api/Example.Api.csproj\"\nRUN dotnet build \"./src/Example.Api/Example.Api.csproj\"\nRUN dotnet test \"Example.Api.sln\"\n\nFROM build AS publish\nRUN dotnet publish \"./src/Example.Api/Example.Api.csproj\" -c Release -o /app\n\nFROM base AS final\nWORKDIR /app\nCOPY --from=publish /app .\nENTRYPOINT [\"dotnet\", \"Example.Api.dll\"]\n"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Api/Example.Api.csproj",
+                        "code": "<Project Sdk=\"Microsoft.NET.Sdk.Web\">\n\n  <PropertyGroup>\n    <TargetFramework>net6.0</TargetFramework>\n    <Nullable>enable</Nullable>\n    <ImplicitUsings>enable</ImplicitUsings>\n    <RootNamespace>Example.Api</RootNamespace>\n    <AssemblyName>Example.Api</AssemblyName>\n    <GenerateDocumentationFile>true</GenerateDocumentationFile>\n    <NoWarn>$(NoWarn);1701;1702;1591</NoWarn>  \n\n    <UserSecretsId>efad71c6-743c-4b87-9de8-f26d77146f6d</UserSecretsId>\n    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>\n    <DockerfileContext>..\\..</DockerfileContext>\n    <DockerComposeProjectPath>..\\..\\docker-compose.dcproj</DockerComposeProjectPath>    \n  </PropertyGroup>\n\n  <ItemGroup>\n    <PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"6.3.0\" />\n    <PackageReference Include=\"FluentValidation.AspNetCore\" Version=\"10.4.0\" />\n  </ItemGroup>\n\n  <ItemGroup>\n    <ProjectReference Include=\"..\\Example.Application\\Example.Application.csproj\">\n      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>\n    </ProjectReference>\n    <ProjectReference Include=\"..\\Example.Infrastructure\\Example.Infrastructure.csproj\">\n      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>\n    </ProjectReference>\n  </ItemGroup>\n\n  <ItemGroup>\n    <InternalsVisibleTo Include =\"Example.Api.IntegrationTests\" />\n  </ItemGroup>\n\n</Project>"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Api/Usings.cs",
+                        "code": "global using System.Net;\nglobal using Microsoft.AspNetCore.Mvc;\nglobal using Example.Application;\nglobal using Example.Infrastructure;\nglobal using MediatR;"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Api/Program.cs",
+                        "code": "using System.Text.Json.Serialization;\nusing FluentValidation.AspNetCore;\nusing Microsoft.OpenApi.Models;\nusing StackSpot.ErrorHandler;\nusing Example.Application.Common.StackSpot;\n\nvar builder = WebApplication.CreateBuilder(args);\n\nbuilder.Services.AddApplication();\nbuilder.Services.AddInfrastructure(builder.Configuration);\nbuilder.Services.AddStackSpot(builder.Configuration, builder.Environment);\n\nbuilder.Services.AddHttpContextAccessor();\n\nbuilder.Services.AddHealthChecks();\nbuilder.Services.AddControllers()\n       .AddFluentValidation(x => x.AutomaticValidationEnabled = false)\n       .AddJsonOptions(x =>\n       {\n            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());\n       });\n\nbuilder.Services.AddSwaggerGen(c =>\n{\n    c.SwaggerDoc(\"v1\", new OpenApiInfo { Title = \"Example.Api\", Version = \"v1\" });\n});\n\nvar app = builder.Build();\n\napp.UseCors(builder => builder\n    .AllowAnyOrigin()\n    .AllowAnyMethod()\n    .AllowAnyHeader());\n\napp.UseSwagger();\napp.UseSwaggerUI(c => c.SwaggerEndpoint(\"/swagger/v1/swagger.json\", \"Example.Api v1\"));\n\napp.UseHealthChecks(\"/health\");\napp.UseHttpsRedirection();\n\napp.UseErrorHandler();\napp.UseRouting();\n\napp.MapControllers();\n\napp.UseStackSpot(builder.Configuration, builder.Environment);\n\napp.Run();"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Api/Controllers/HelloWorldController.cs",
+                        "code": "using Example.Application.CreateHelloWorld;\n\nnamespace Example.Api.Controllers;\n\n[ApiController]\n[Route(\"[controller]\")]\npublic class HelloWorldController : ControllerBase\n{\n    private readonly IMediator _mediator;\n\n    public HelloWorldController(IMediator mediator)\n    {\n        _mediator = mediator;\n    }\n\n    [HttpPost]\n    [ProducesResponseType(typeof(CreateHelloWorldResult), (int)HttpStatusCode.OK)]\n    [ProducesResponseType(typeof(StackSpot.ErrorHandler.HttpResponse), (int)HttpStatusCode.BadRequest)]\n    public async Task<IActionResult> Post([FromBody] CreateHelloWorldCommand command)\n    {\n        var result = await _mediator.Send(command);\n        return Ok(result);\n    }\n}"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "UeMVQQMujy8=",
+  "success": true,
+  "projectFilePath": "/Users/alcides.filho/poc/dotnet-example/src/Example.Domain/Example.Domain.csproj",
+  "expectedPackageFiles": [
+    "/Users/alcides.filho/.nuget/packages/microsoft.netcore.app.ref/6.0.30/microsoft.netcore.app.ref.6.0.30.nupkg.sha512",
+    "/Users/alcides.filho/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.30/microsoft.aspnetcore.app.ref.6.0.30.nupkg.sha512"
+  ],
+  "logs": []
+}

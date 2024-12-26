@@ -1,0 +1,39 @@
+{
+    "input_data": {
+        "json": {
+            "data": {
+                "desired_dotnet_version": "net8",
+                "files": [
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/tests/Example.Api.IntegrationTests/Utils/TestFixture.cs",
+                        "code": "using Microsoft.AspNetCore.Hosting;\nusing Microsoft.AspNetCore.Mvc.Testing;\nusing Microsoft.Extensions.Configuration;\nusing Microsoft.Extensions.Hosting;\nusing WireMock.Server;\n\nnamespace Example.Api.IntegrationTests.Utils;\n\nclass TestFixture : WebApplicationFactory<Program>\n{\n    public WireMockServer? _mockServer;\n\n    protected override IHost CreateHost(IHostBuilder builder)\n    {\n        builder.ConfigureAppConfiguration((hostingContext, config) =>\n        {\n            config.AddJsonFile(\"appsettings.json\");\n        }).UseEnvironment(\"Development\");\n\n        _mockServer = WireMockBuilder.Build();\n\n        return base.CreateHost(builder);\n    }\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/tests/Example.Api.IntegrationTests/Utils/WireMockBuilder.cs",
+                        "code": "using WireMock.Server;\n\nnamespace Example.Api.IntegrationTests.Utils;\n\npublic class WireMockBuilder\n{\n    protected WireMockBuilder()\n    {\n\n    }\n\n    private static volatile WireMockServer? _server;\n    private static object _syncRoot = new Object();\n\n    public static WireMockServer Build(int port = 5006)\n    {\n        if (_server is null)\n        {\n            lock (_syncRoot)\n            {\n                if (_server is null)\n                    _server = WireMockServer.Start(port);\n            }\n        }\n        return _server;\n    }\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/tests/Example.Api.IntegrationTests/Controllers/HelloWorldControllerTests.cs",
+                        "code": "namespace Example.Api.IntegrationTests.Controllers;\n\npublic class HelloWorldControllerTests\n{\n    private readonly TestFixture _testFixture;\n\n    public HelloWorldControllerTests()\n    {\n        _testFixture = new TestFixture();\n    }\n\n    [Fact]\n    public async Task Should_Hello_World_Create_Return_Success()\n    {\n        var command = new CreateHelloWorldCommand\n        {\n            UserName = \"test\",\n            Level = UserLevel.Admin\n        };\n\n        var content = new HttpRequestMessage(HttpMethod.Post, $\"HelloWorld\")\n        {\n            Content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, \"application/json\")\n        };\n\n        var response = await _testFixture.CreateClient().SendAsync(content);\n\n        Assert.Equal(HttpStatusCode.OK, response.StatusCode);\n    }\n\n    [Fact]\n    public async Task Should_Hello_World_Create_Return_Bad_Request()\n    {\n        var command = new CreateHelloWorldCommand\n        {\n            Level = UserLevel.Admin\n        };\n\n        var content = new HttpRequestMessage(HttpMethod.Post, $\"HelloWorld\")\n        {\n            Content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, \"application/json\")\n        };\n\n        var response = await _testFixture.CreateClient().SendAsync(content);\n\n        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);\n    }\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/tests/Example.Domain.UnitTests/Example.Domain.UnitTests.csproj",
+                        "code": "<Project Sdk=\"Microsoft.NET.Sdk\">\n\n  <PropertyGroup>\n    <TargetFramework>net6.0</TargetFramework>\n    <RootNamespace>Example.Domain.UnitTests</RootNamespace>\n    <AssemblyName>Example.Domain.UnitTests</AssemblyName>\n    <ImplicitUsings>enable</ImplicitUsings>\n    <Nullable>enable</Nullable>\n    <IsPackable>false</IsPackable>           \n  </PropertyGroup>\n\n  <ItemGroup>\n    <PackageReference Include=\"Microsoft.Extensions.DependencyInjection\" Version=\"6.0.0\" />\n    <PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.1.0\" />\n    <PackageReference Include=\"Moq\" Version=\"4.17.2\" />\n    <PackageReference Include=\"Shouldly\" Version=\"4.0.3\" />\n    <PackageReference Include=\"xunit\" Version=\"2.4.1\" />\n    <PackageReference Include=\"xunit.runner.visualstudio\" Version=\"2.4.3\">\n      <PrivateAssets>all</PrivateAssets>\n      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>\n    </PackageReference>\n    <PackageReference Include=\"coverlet.collector\" Version=\"3.1.2\">\n      <PrivateAssets>all</PrivateAssets>\n      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>\n    </PackageReference>\n    <PackageReference Include=\"coverlet.msbuild\" Version=\"3.1.0\">\n      <PrivateAssets>all</PrivateAssets>\n      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>\n    </PackageReference>\n    <PackageReference Include=\"FluentAssertions\" Version=\"6.6.0\" />\n    <PackageReference Include=\"System.Net.Http\" Version=\"4.3.4\" />\n    <PackageReference Include=\"System.DirectoryServices.Protocols\" Version=\"6.0.1\" />\n    <PackageReference Include=\"System.Text.RegularExpressions\" Version=\"4.3.1\" />    \n  </ItemGroup>\n\n  <ItemGroup>\n    <ProjectReference Include=\"..\\..\\src\\Example.Domain\\Example.Domain.csproj\" />\n  </ItemGroup>\n</Project>\n"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/tests/Example.Domain.UnitTests/Usings.cs",
+                        "code": "global using Example.Domain.Enums;\nglobal using Example.Domain.Models;\nglobal using Xunit;"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/tests/Example.Domain.UnitTests/Models/HelloWorldResponseTests.cs",
+                        "code": "namespace Example.Domain.UnitTests.Models;\n\npublic class HelloWorldResponseTests\n{\n    [Fact]\n    public void Should_Fill_All_Properties()\n    {\n        //arrange\n        var helloWorldResponse = new HelloWorldResponse\n        {\n            UserName = \"test\",\n            UserId = Guid.NewGuid(),\n            Level = (int)UserLevel.Admin\n        };\n\n        //act\n        //assert\n        foreach (var property in helloWorldResponse.GetType().GetProperties())\n            Assert.False(property.GetValue(helloWorldResponse) == default, $\"{property.DeclaringType}.{property.Name} is default value.\");\n    }\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Application/DependencyInjection.cs",
+                        "code": "using Example.Application.Common.Behaviours;\n\nnamespace Example.Application;\n\n[ExcludeFromCodeCoverage]\npublic static class DependencyInjection\n{\n    public static IServiceCollection AddApplication(this IServiceCollection services)\n    {\n        services.AddAutoMapper(Assembly.GetExecutingAssembly());\n        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());\n        services.AddMediatR(Assembly.GetExecutingAssembly());\n        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));\n\n        return services;\n    }\n}"
+                    }
+                ]
+            }
+        }
+    }
+}

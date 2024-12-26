@@ -1,0 +1,35 @@
+{
+    "input_data": {
+        "json": {
+            "data": {
+                "desired_dotnet_version": "net8",
+                "files": [
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Domain/Models/HelloWorldResponse.cs",
+                        "code": "namespace Example.Domain.Models;\n\npublic class HelloWorldResponse\n{\n    public Guid UserId { get; set; }\n    public string UserName { get; set; } = default!;\n    public int Level { get; set; }\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Domain/Interfaces/Services/IHelloWorldService.cs",
+                        "code": "namespace Example.Domain.Interfaces.Services;\n\npublic interface IHelloWorldService\n{\n    Task<HelloWorldResponse> Create(string userName, int userLevel);\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Infrastructure/Example.Infrastructure.csproj",
+                        "code": "<Project Sdk=\"Microsoft.NET.Sdk\">\n\n  <PropertyGroup>\n    <TargetFramework>net6.0</TargetFramework>\n    <RootNamespace>Example.Infrastructure</RootNamespace>\n    <AssemblyName>Example.Infrastructure</AssemblyName>\n    <ImplicitUsings>enable</ImplicitUsings>\n    <Nullable>enable</Nullable>    \n  </PropertyGroup>\n\n  <ItemGroup>\n    <ProjectReference Include=\"..\\Example.Domain\\Example.Domain.csproj\" />\n  </ItemGroup>\n\n  <ItemGroup>\n    <PackageReference Include=\"Microsoft.Extensions.DependencyInjection.Abstractions\" Version=\"6.0.0\" />\n    <PackageReference Include=\"Microsoft.Extensions.Configuration\" Version=\"6.0.1\" />\n    <PackageReference Include=\"Microsoft.Extensions.Configuration.Abstractions\" Version=\"6.0.0\" />\n  </ItemGroup>\n\n  <ItemGroup>\n    <InternalsVisibleTo Include =\"Example.Infrastructure.UnitTests\" />\n  </ItemGroup>\n\n</Project>"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Infrastructure/DependencyInjection.cs",
+                        "code": "using Example.Domain.Interfaces.Services;\nusing Example.Infrastructure.Services;\n\nnamespace Example.Infrastructure;\n\n[ExcludeFromCodeCoverage]\npublic static class DependencyInjection\n{\n    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)\n    {\n        services.AddScoped<IHelloWorldService, HelloWorldService>();\n        return services;\n    }\n}"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Infrastructure/Usings.cs",
+                        "code": "global using System.Diagnostics.CodeAnalysis;\nglobal using Microsoft.Extensions.Configuration;\nglobal using Microsoft.Extensions.DependencyInjection;\nglobal using Example.Domain.Models;"
+                    },
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Infrastructure/Services/HelloWorldService.cs",
+                        "code": "using Example.Domain.Interfaces.Services;\nusing Example.Domain.Models;\n\nnamespace Example.Infrastructure.Services\n{\n    public class HelloWorldService : IHelloWorldService\n    {\n        public async Task<HelloWorldResponse> Create(string userName, int userLevel)\n        {\n            await Task.Delay(2000);\n            return new HelloWorldResponse\n            {\n                UserId = Guid.NewGuid(),\n                Level = userLevel,\n                UserName = userName\n            };\n        }\n    }\n}"
+                    }
+                ]
+            }
+        }
+    }
+}

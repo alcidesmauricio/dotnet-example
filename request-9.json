@@ -1,0 +1,15 @@
+{
+    "input_data": {
+        "json": {
+            "data": {
+                "desired_dotnet_version": "net8",
+                "files": [
+                    {
+                        "path": "/Users/alcides.filho/poc/dotnet-example/repo/src/Example.Infrastructure/Services/HelloWorldService.cs",
+                        "code": "using Example.Domain.Interfaces.Services;\nusing Example.Domain.Models;\n\nnamespace Example.Infrastructure.Services\n{\n    public class HelloWorldService : IHelloWorldService\n    {\n        public async Task<HelloWorldResponse> Create(string userName, int userLevel)\n        {\n            await Task.Delay(2000);\n            return new HelloWorldResponse\n            {\n                UserId = Guid.NewGuid(),\n                Level = userLevel,\n                UserName = userName\n            };\n        }\n    }\n}"
+                    }
+                ]
+            }
+        }
+    }
+}
