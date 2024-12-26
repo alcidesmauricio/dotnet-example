@@ -2,7 +2,6 @@ namespace Example.Application.UnitTests.Common.Mappings;
 
 public class MappingProfileTests
 {
-
     private readonly IConfigurationProvider _configuration;
     private readonly IMapper _mapper;
 

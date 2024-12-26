@@ -5,7 +5,7 @@ public class HelloWorldResponseTests
     [Fact]
     public void Should_Fill_All_Properties()
     {
-        //arrange
+        // Arrange
         var helloWorldResponse = new HelloWorldResponse
         {
             UserName = "test",
@@ -13,9 +13,10 @@ public class HelloWorldResponseTests
             Level = (int)UserLevel.Admin
         };
 
-        //act
-        //assert
+        // Act & Assert
         foreach (var property in helloWorldResponse.GetType().GetProperties())
+        {
             Assert.False(property.GetValue(helloWorldResponse) == default, $"{property.DeclaringType}.{property.Name} is default value.");
+        }
     }
 }
