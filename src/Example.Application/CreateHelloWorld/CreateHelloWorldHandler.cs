@@ -8,15 +8,10 @@ public class CreateHelloWorldHandler : IRequestHandler<CreateHelloWorldCommand, 
     private readonly IMapper _mapper;
     private readonly IHelloWorldService _helloWorldService;
 
-
     public CreateHelloWorldHandler(ILogger<CreateHelloWorldHandler> logger,
                                     IMapper mapper,
-                                    IHelloWorldService helloWorldService)
-    {
-        _logger = logger;
-        _mapper = mapper;
-        _helloWorldService = helloWorldService;
-    }
+                                    IHelloWorldService helloWorldService) =>
+        (_logger, _mapper, _helloWorldService) = (logger, mapper, helloWorldService);
 
     public async Task<CreateHelloWorldResult> Handle(CreateHelloWorldCommand request, CancellationToken cancellationToken)
     {

@@ -4,10 +4,7 @@ public class HelloWorldControllerTests
 {
     private readonly TestFixture _testFixture;
 
-    public HelloWorldControllerTests()
-    {
-        _testFixture = new TestFixture();
-    }
+    public HelloWorldControllerTests() => _testFixture = new TestFixture();
 
     [Fact]
     public async Task Should_Hello_World_Create_Return_Success()
@@ -18,7 +15,7 @@ public class HelloWorldControllerTests
             Level = UserLevel.Admin
         };
 
-        var content = new HttpRequestMessage(HttpMethod.Post, $"HelloWorld")
+        var content = new HttpRequestMessage(HttpMethod.Post, "HelloWorld")
         {
             Content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, "application/json")
         };
@@ -36,7 +33,7 @@ public class HelloWorldControllerTests
             Level = UserLevel.Admin
         };
 
-        var content = new HttpRequestMessage(HttpMethod.Post, $"HelloWorld")
+        var content = new HttpRequestMessage(HttpMethod.Post, "HelloWorld")
         {
             Content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, "application/json")
         };

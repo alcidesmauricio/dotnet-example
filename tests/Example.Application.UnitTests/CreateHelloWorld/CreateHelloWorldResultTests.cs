@@ -9,7 +9,7 @@ public class CreateHelloWorldResultTests
     [Fact]
     public void Should_Fill_All_Properties()
     {
-        //arrange
+        // Arrange
         var result = new CreateHelloWorldResult
         {
             Id = Guid.NewGuid(),
@@ -17,9 +17,10 @@ public class CreateHelloWorldResultTests
             Level = UserLevel.Admin
         };
 
-        //act
-        //assert
+        // Act & Assert
         foreach (var property in result.GetType().GetProperties())
+        {
             Assert.False(property.GetValue(result) == default, $"{property.DeclaringType}.{property.Name} is default value.");
+        }
     }
 }

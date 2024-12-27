@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Example.Api.UnitTests</RootNamespace>
     <AssemblyName>Example.Api.UnitTests</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -36,4 +36,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Example.Api\Example.Api.csproj" />
   </ItemGroup>
+
 </Project>

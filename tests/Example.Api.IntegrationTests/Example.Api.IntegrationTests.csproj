@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Example.Api.IntegrationTests</RootNamespace>
     <AssemblyName>Example.Api.IntegrationTests</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -44,4 +44,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Example.Api\Example.Api.csproj" />
   </ItemGroup>
+
 </Project>

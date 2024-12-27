@@ -8,7 +8,6 @@ public class CreateHelloWorldHandlerTests
     private readonly Mock<IMapper> _mapper;
     private readonly Mock<IHelloWorldService> _helloWorldService;
 
-
     public CreateHelloWorldHandlerTests()
     {
         _logger = new Mock<ILogger<CreateHelloWorldHandler>>();
@@ -19,7 +18,7 @@ public class CreateHelloWorldHandlerTests
     [Fact]
     public async Task Should_Create_Hello_World_Success()
     {
-        //arrange
+        // Arrange
         var command = new CreateHelloWorldCommand
         {
             UserName = "test",
@@ -40,51 +39,37 @@ public class CreateHelloWorldHandlerTests
             UserName = response.UserName
         };
 
-        var handler = new CreateHelloWorldHandler(_logger.Object,
-                                                    _mapper.Object,
-                                                    _helloWorldService.Object);
+        var handler = new CreateHelloWorldHandler(_logger.Object, _mapper.Object, _helloWorldService.Object);
 
         _helloWorldService.Setup(x => x.Create(command.UserName, (int)command.Level))
-                            .ReturnsAsync(response);
+            .ReturnsAsync(response);
 
         _mapper.Setup(x => x.Map<CreateHelloWorldResult>(It.IsAny<object>())).Returns(createHelloWorldResult);
 
-        //act
+        // Act
         var result = await handler.Handle(command, default);
 
-        //assert
+        // Assert
         Assert.NotNull(result);
         _helloWorldService.VerifyAll();
     }
 
-
     [Fact]
     public async Task Should_Create_Hello_World_Throw_Exception()
     {
-        //arrange
+        // Arrange
         var command = new CreateHelloWorldCommand
         {
             UserName = "test",
             Level = UserLevel.Admin
         };
 
-        var response = new HelloWorldResponse
-        {
-            UserId = Guid.NewGuid(),
-            Level = (int)command.Level,
-            UserName = command.UserName
-        };
-
-        var handler = new CreateHelloWorldHandler(_logger.Object,
-                                                    _mapper.Object,
-                                                    _helloWorldService.Object);
+        var handler = new CreateHelloWorldHandler(_logger.Object, _mapper.Object, _helloWorldService.Object);
 
         _helloWorldService.Setup(x => x.Create(command.UserName, (int)command.Level))
-                            .ThrowsAsync(new Exception());
+            .ThrowsAsync(new Exception());
 
-
-        //act
-        //assert
+        // Act & Assert
         await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, default));
     }
 }
