@@ -18,7 +18,7 @@ public class HelloWorldControllerTests
             Level = UserLevel.Admin
         };
 
-        var content = new HttpRequestMessage(HttpMethod.Post, $"HelloWorld")
+        var content = new HttpRequestMessage(HttpMethod.Post, "HelloWorld")
         {
             Content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, "application/json")
         };
@@ -36,7 +36,7 @@ public class HelloWorldControllerTests
             Level = UserLevel.Admin
         };
 
-        var content = new HttpRequestMessage(HttpMethod.Post, $"HelloWorld")
+        var content = new HttpRequestMessage(HttpMethod.Post, "HelloWorld")
         {
             Content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, "application/json")
         };
