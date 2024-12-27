@@ -16,6 +16,8 @@ public class HelloWorldResponseTests
         //act
         //assert
         foreach (var property in helloWorldResponse.GetType().GetProperties())
+        {
             Assert.False(property.GetValue(helloWorldResponse) == default, $"{property.DeclaringType}.{property.Name} is default value.");
+        }
     }
 }

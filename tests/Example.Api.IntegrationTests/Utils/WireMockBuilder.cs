@@ -10,7 +10,7 @@ public class WireMockBuilder
     }
 
     private static volatile WireMockServer? _server;
-    private static object _syncRoot = new Object();
+    private static object _syncRoot = new();
 
     public static WireMockServer Build(int port = 5006)
     {
@@ -18,8 +18,7 @@ public class WireMockBuilder
         {
             lock (_syncRoot)
             {
-                if (_server is null)
-                    _server = WireMockServer.Start(port);
+                _server ??= WireMockServer.Start(port);
             }
         }
         return _server;
