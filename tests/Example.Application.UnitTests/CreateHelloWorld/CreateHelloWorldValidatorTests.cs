@@ -4,39 +4,38 @@ public class CreateHelloWorldValidatorTests
 {
     private readonly CreateHelloWorldValidator _validator;
 
-    public CreateHelloWorldValidatorTests()
-    {
-        _validator = new CreateHelloWorldValidator();
-    }
+    public CreateHelloWorldValidatorTests() => _validator = new CreateHelloWorldValidator();
 
     [Fact]
     public void Should_UserNameIsEmpty()
     {
-        //arrange
+        // Arrange
         var command = new CreateHelloWorldCommand
         {
             Level = UserLevel.Admin
         };
 
-        //act
+        // Act
         var result = _validator.Validate(command);
-        //assert
+
+        // Assert
         Assert.False(result.IsValid);
     }
 
     [Fact]
     public void Should_IsValid()
     {
-        //arrange
+        // Arrange
         var command = new CreateHelloWorldCommand
         {
             UserName = "Test",
             Level = UserLevel.Admin
         };
 
-        //act
+        // Act
         var result = _validator.Validate(command);
-        //assert
+
+        // Assert
         Assert.True(result.IsValid);
     }
 }

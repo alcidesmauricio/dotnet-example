@@ -8,7 +8,7 @@ namespace Example.Api.IntegrationTests.Utils;
 
 class TestFixture : WebApplicationFactory<Program>
 {
-    public WireMockServer? _mockServer;
+    public WireMockServer? MockServer { get; private set; }
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
@@ -17,7 +17,7 @@ class TestFixture : WebApplicationFactory<Program>
             config.AddJsonFile("appsettings.json");
         }).UseEnvironment("Development");
 
-        _mockServer = WireMockBuilder.Build();
+        MockServer = WireMockBuilder.Build();
 
         return base.CreateHost(builder);
     }

@@ -14,13 +14,14 @@ public class HelloWorldServiceTests
     [Fact]
     public async Task Should_Create_Returns_Ok()
     {
-        //arrange
+        // Arrange
         string userName = "test";
         int userLevel = (int)UserLevel.Admin;
 
-        //act
+        // Act
         var result = await _helloWorldService.Create(userName, userLevel);
-        //assert
+
+        // Assert
         Assert.IsType<Guid>(result.UserId);
     }
 }

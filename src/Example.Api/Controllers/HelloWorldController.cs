@@ -1,25 +1,19 @@
-using Example.Application.CreateHelloWorld;
+namespace Example.Api.Controllers;
 
-namespace Example.Api.Controllers
+[ApiController]
+[Route("[controller]")]
+public class HelloWorldController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class HelloWorldController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public HelloWorldController(IMediator mediator) => _mediator = mediator;
+
+    [HttpPost]
+    [ProducesResponseType(typeof(CreateHelloWorldResult), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(StackSpot.ErrorHandler.HttpResponse), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> Post([FromBody] CreateHelloWorldCommand command)
     {
-        private readonly IMediator _mediator;
-
-        public HelloWorldController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpPost]
-        [ProducesResponseType(typeof(CreateHelloWorldResult), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(StackSpot.ErrorHandler.HttpResponse), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Post([FromBody] CreateHelloWorldCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
+        var result = await _mediator.Send(command);
+        return Results.Ok(result); // Usando Results para simplificar a resposta
     }
 }

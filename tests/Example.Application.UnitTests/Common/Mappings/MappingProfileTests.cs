@@ -2,7 +2,6 @@ namespace Example.Application.UnitTests.Common.Mappings;
 
 public class MappingProfileTests
 {
-
     private readonly IConfigurationProvider _configuration;
     private readonly IMapper _mapper;
 
@@ -29,11 +28,10 @@ public class MappingProfileTests
         _mapper.Map(instance, source, destination);
     }
 
-    private object GetInstanceOf(Type type)
+    private static object GetInstanceOf(Type type)
     {
-        if (type.GetConstructor(Type.EmptyTypes) != null)
-            return Activator.CreateInstance(type)!;
-
-        return FormatterServices.GetUninitializedObject(type);
+        return type.GetConstructor(Type.EmptyTypes) != null
+            ? Activator.CreateInstance(type)!
+            : FormatterServices.GetUninitializedObject(type);
     }
 }
