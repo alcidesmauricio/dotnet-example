@@ -1,9 +1,10 @@
-namespace Example.Domain.Enums;
-
-public enum UserLevel
+namespace Example.Domain.Enums
 {
-    None = 0,
-    Readonly = 1,
-    Member = 2,
-    Admin = 3
+    public enum UserLevel
+    {
+        None = 0,
+        Readonly = 1,
+        Member = 2,
+        Admin = 3
+    }
 }

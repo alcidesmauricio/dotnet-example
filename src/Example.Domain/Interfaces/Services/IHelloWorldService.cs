@@ -1,6 +1,7 @@
-namespace Example.Domain.Interfaces.Services;
-
-public interface IHelloWorldService
+namespace Example.Domain.Interfaces.Services
 {
-    Task<HelloWorldResponse> Create(string userName, int userLevel);
+    public interface IHelloWorldService
+    {
+        Task<HelloWorldResponse> Create(string userName, int userLevel);
+    }
 }

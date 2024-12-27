@@ -1,14 +1,15 @@
 using Example.Domain.Interfaces.Services;
 using Example.Infrastructure.Services;
 
-namespace Example.Infrastructure;
-
-[ExcludeFromCodeCoverage]
-public static class DependencyInjection
+namespace Example.Infrastructure
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    [ExcludeFromCodeCoverage]
+    public static class DependencyInjection
     {
-        services.AddScoped<IHelloWorldService, HelloWorldService>();
-        return services;
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IHelloWorldService, HelloWorldService>();
+            return services;
+        }
     }
 }

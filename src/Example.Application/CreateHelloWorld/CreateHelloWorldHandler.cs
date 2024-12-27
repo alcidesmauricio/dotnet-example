@@ -1,28 +1,29 @@
 using Example.Domain.Interfaces.Services;
 
-namespace Example.Application.CreateHelloWorld;
-
-public class CreateHelloWorldHandler : IRequestHandler<CreateHelloWorldCommand, CreateHelloWorldResult>
+namespace Example.Application.CreateHelloWorld
 {
-    private readonly ILogger<CreateHelloWorldHandler> _logger;
-    private readonly IMapper _mapper;
-    private readonly IHelloWorldService _helloWorldService;
-
-
-    public CreateHelloWorldHandler(ILogger<CreateHelloWorldHandler> logger,
-                                    IMapper mapper,
-                                    IHelloWorldService helloWorldService)
+    public class CreateHelloWorldHandler : IRequestHandler<CreateHelloWorldCommand, CreateHelloWorldResult>
     {
-        _logger = logger;
-        _mapper = mapper;
-        _helloWorldService = helloWorldService;
-    }
+        private readonly ILogger<CreateHelloWorldHandler> _logger;
+        private readonly IMapper _mapper;
+        private readonly IHelloWorldService _helloWorldService;
 
-    public async Task<CreateHelloWorldResult> Handle(CreateHelloWorldCommand request, CancellationToken cancellationToken)
-    {
-        _logger.LogDebug("Init Handle");
 
-        var response = await _helloWorldService.Create(request.UserName, (int)request.Level);
-        return _mapper.Map<CreateHelloWorldResult>(response);
+        public CreateHelloWorldHandler(ILogger<CreateHelloWorldHandler> logger,
+                                        IMapper mapper,
+                                        IHelloWorldService helloWorldService)
+        {
+            _logger = logger;
+            _mapper = mapper;
+            _helloWorldService = helloWorldService;
+        }
+
+        public async Task<CreateHelloWorldResult> Handle(CreateHelloWorldCommand request, CancellationToken cancellationToken)
+        {
+            _logger.LogDebug("Init Handle");
+
+            var response = await _helloWorldService.Create(request.UserName, (int)request.Level);
+            return _mapper.Map<CreateHelloWorldResult>(response);
+        }
     }
 }
