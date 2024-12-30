@@ -1,12 +1,11 @@
-namespace Example.Application.CreateHelloWorld
+namespace Example.Application.CreateHelloWorld;
+
+public class CreateHelloWorldValidator : AbstractValidator<CreateHelloWorldCommand>
 {
-    public class CreateHelloWorldValidator : AbstractValidator<CreateHelloWorldCommand>
+    public CreateHelloWorldValidator()
     {
-        public CreateHelloWorldValidator()
-        {
-            RuleFor(command => command.UserName)
+        RuleFor(command => command.UserName)
             .NotNull()
             .NotEmpty();
-        }
     }
 }
